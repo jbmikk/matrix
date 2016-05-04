@@ -1,6 +1,8 @@
 
+#include <stdio.h>
+#include <math.h>
+
 #include "matrix.h"
-#include "stdio.h"
 
 void print_v4(Vec4 *v)
 {
@@ -75,6 +77,40 @@ void scale_m4(Mat4 *m, float x, float y, float z)
 	(*m)[2][1] = 0.0f;
 	(*m)[2][2] = z;
 	(*m)[2][3] = 0.0f;
+	(*m)[3][0] = 0.0f;
+	(*m)[3][1] = 0.0f;
+	(*m)[3][2] = 0.0f;
+	(*m)[3][3] = 1.0f;
+}
+
+void rotate_m4(Mat4 *m, float x, float y, float z, float angle)
+{
+	float a_sin = sin(angle);
+	float a_cos = cos(angle);
+	float len = sqrt(x*x+y*y+z*z);
+	float ux = x/len;
+	float uy = y/len;
+	float uz = z/len;
+
+	float xy = ux*uy*(1-a_cos);
+	float xz = ux*uz*(1-a_cos);
+	float yz = uy*uz*(1-a_cos);
+
+	(*m)[0][0] = a_cos + ux*ux*(1-a_cos);
+	(*m)[0][1] = xy-uz*a_sin;
+	(*m)[0][2] = xz+uy*a_sin;
+	(*m)[0][3] = 0.0f;
+
+	(*m)[1][0] = xy+z*a_sin;
+	(*m)[1][1] = a_cos + uy*uy*(1-a_cos);
+	(*m)[1][2] = yz-ux*a_sin;
+	(*m)[1][3] = 0.0f;
+
+	(*m)[2][0] = xz-uy*a_sin;
+	(*m)[2][1] = yz+ux*a_sin;
+	(*m)[2][2] = a_cos + uz*uz*(1-a_cos);
+	(*m)[2][3] = 0.0f;
+
 	(*m)[3][0] = 0.0f;
 	(*m)[3][1] = 0.0f;
 	(*m)[3][2] = 0.0f;

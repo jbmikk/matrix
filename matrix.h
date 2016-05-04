@@ -12,6 +12,7 @@ float dot_v4_c4(Vec4 *v, Mat4 *m, int col);
 void mul_m4_v4(Vec4 *result, Mat4 *m, Vec4 *v);
 void mul_m4(Mat4 *result, Mat4 *m1, Mat4 *m2);
 void scale_m4(Mat4 *m, float x, float y, float z);
+void rotate_m4(Mat4 *m, float x, float y, float z, float angle);
 
 void print_v4(Vec4 *v);
 void print_m4(Mat4 *m);
