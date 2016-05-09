@@ -14,7 +14,7 @@ void mul_m4(Mat4 *result, Mat4 *m1, Mat4 *m2);
 void translate_m4(Mat4 *m, float x, float y, float z);
 void scale_m4(Mat4 *m, float x, float y, float z);
 void rotate_m4(Mat4 *m, float x, float y, float z, float angle);
-void perspective_m4(Mat4 *m, float fovy, float aspect, float far, float near);
+void perspective_m4(Mat4 *m, float fovy, float aspect, float near, float far);
 
 void print_v4(Vec4 *v);
 void print_m4(Mat4 *m);

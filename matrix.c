@@ -137,7 +137,7 @@ void rotate_m4(Mat4 *m, float x, float y, float z, float angle)
 	(*m)[3][3] = 1.0f;
 }
 
-void perspective_m4(Mat4 *m, float fovy, float aspect, float far, float near)
+void perspective_m4(Mat4 *m, float fovy, float aspect, float near, float far)
 {
 	float f = cos(fovy/2.0f)/sin(fovy/2.0f);
 
