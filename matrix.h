@@ -4,6 +4,7 @@
 //#define Vec(N) float Vec##N[N]
 //#define Mat(N, M) float Mat##N##x##M[N][M]
 
+typedef float Vec3[4];
 typedef float Vec4[4];
 typedef float Mat4[4][4];
 
@@ -15,6 +16,7 @@ void translate_m4(Mat4 *m, float x, float y, float z);
 void scale_m4(Mat4 *m, float x, float y, float z);
 void rotate_m4(Mat4 *m, float x, float y, float z, float angle);
 void perspective_m4(Mat4 *m, float fovy, float aspect, float near, float far);
+void look_at_m4(Mat4 *m, Vec3 *pos, Vec3 *center, Vec3 *up);
 
 void print_v4(Vec4 *v);
 void print_m4(Mat4 *m);

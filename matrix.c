@@ -17,6 +17,43 @@ void print_m4(Mat4 *m)
 	print_v4(&((*m)[3]));
 }
 
+float norm_v3(Vec3 *v)
+{
+	return sqrt(
+		(*v)[0]*(*v)[0]+
+		(*v)[1]*(*v)[1]+
+		(*v)[2]*(*v)[2]
+	);
+}
+
+void add_v3(Vec3 *r, Vec3 *v1, Vec3 *v2)
+{
+	(*r)[0] = (*v1)[0] + (*v2)[0];
+	(*r)[1] = (*v1)[1] + (*v2)[1];
+	(*r)[2] = (*v1)[2] + (*v2)[2];
+}
+
+void sub_v3(Vec3 *r, Vec3 *v1, Vec3 *v2)
+{
+	(*r)[0] = (*v1)[0]  - (*v2)[0];
+	(*r)[1] = (*v1)[1]  - (*v2)[1];
+	(*r)[2] = (*v1)[2]  - (*v2)[2];
+}
+
+void scalar_v3(Vec3 *r, Vec3 *v, float s)
+{
+	(*r)[0] = s*(*v)[0];
+	(*r)[1] = s*(*v)[1];
+	(*r)[2] = s*(*v)[2];
+}
+
+float cross_v3(Vec3 *r, Vec3 *u, Vec3 *v)
+{
+	(*r)[0] = (*u)[1] * (*v)[2] -(*u)[2] * (*v)[1];
+	(*r)[1] = (*u)[2] * (*v)[0] -(*u)[0] * (*v)[2];
+	(*r)[2] = (*u)[0] * (*v)[1] -(*u)[1] * (*v)[0];
+}
+
 float dot_v4_v4(Vec4 *v1, Vec4 *v2)
 {
         return
@@ -160,4 +197,42 @@ void perspective_m4(Mat4 *m, float fovy, float aspect, float near, float far)
 	(*m)[3][1] = 0.0f;
 	(*m)[3][2] = -1.0;
 	(*m)[3][3] = 0.0f;
+}
+
+void look_at_m4(Mat4 *m, Vec3 *pos, Vec3 *center, Vec3 *UP)
+{
+	Vec3 F, f, S, s, u, up;
+	Mat4 M, T;
+
+	sub_v3(&F, center, pos);
+
+	scalar_v3(&f, &F, 1.0f/norm_v3(&F));
+	scalar_v3(&up, UP, 1.0f/norm_v3(UP));
+	
+	cross_v3(&S, &f, &up);
+	scalar_v3(&s, &S, 1.0f/norm_v3(&S));
+	cross_v3(&u, &s, &f);
+
+	M[0][0] = S[0];
+	M[0][1] = S[1];
+	M[0][2] = S[2];
+	M[0][3] = 0;
+
+	M[1][0] = u[0];
+	M[1][1] = u[1];
+	M[1][2] = u[2];
+	M[1][3] = 0;
+
+	M[2][0] = -f[0];
+	M[2][1] = -f[1];
+	M[2][2] = -f[2];
+	M[2][3] = 0;
+
+	M[3][0] = 0.0f;
+	M[3][1] = 0.0f;
+	M[3][2] = 0.0f;
+	M[3][3] = 1.0f;
+
+	translate_m4(&T, -(*pos)[0], -(*pos)[1], -(*pos)[2]);
+	mul_m4(m, &M, &T);
 }
