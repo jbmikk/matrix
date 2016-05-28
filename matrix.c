@@ -4,6 +4,11 @@
 
 #include "matrix.h"
 
+void print_v3(Vec3 *v)
+{
+	printf("[%f, %f, %f]\n", (*v)[0], (*v)[1], (*v)[2]);
+}
+
 void print_v4(Vec4 *v)
 {
 	printf("[%f, %f, %f, %f]\n", (*v)[0], (*v)[1], (*v)[2], (*v)[3]);
