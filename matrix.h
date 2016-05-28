@@ -8,6 +8,11 @@ typedef float Vec3[4];
 typedef float Vec4[4];
 typedef float Mat4[4][4];
 
+float norm_v3(Vec3 *v);
+void add_v3(Vec3 *r, Vec3 *v1, Vec3 *v2);
+void sub_v3(Vec3 *r, Vec3 *v1, Vec3 *v2);
+void scalar_v3(Vec3 *r, Vec3 *v, float s);
+float cross_v3(Vec3 *r, Vec3 *u, Vec3 *v);
 float dot_v4_v4(Vec4 *v1, Vec4 *v2);
 float dot_v4_c4(Vec4 *v, Mat4 *m, int col);
 void mul_m4_v4(Vec4 *result, Mat4 *m, Vec4 *v);
