@@ -15,6 +15,9 @@
 	_(2, 4) JOIN \
 	_(3, 4) \
 
+#define VEC(S) Vec##S
+#define MAT(S) Mat##S
+
 void print_v3(Vec3 *v)
 {
 	printf("[%f, %f, %f]\n", (*v)[0], (*v)[1], (*v)[2]);
@@ -31,31 +34,49 @@ void print_m4(Mat4 *m)
 	V4(V_PRINT_M,);
 }
 
-#define V_NORM(INDEX, LEN) (*v)[INDEX] * (*v)[INDEX]
-float norm_v3(Vec3 *v)
-{
-	return sqrt(
-		V3(V_NORM, +)
-	);
+#define V_NORM_U(INDEX, LEN) (*v)[INDEX] * (*v)[INDEX]
+#define V_NORM(S) float norm_v##S(VEC(S) *v) \
+{ \
+	return sqrt(V3(V_NORM_U, +)); \
 }
 
-#define V_ADD(INDEX, LEN) (*r)[INDEX] = (*v1)[INDEX] + (*v2)[INDEX];
-void add_v3(Vec3 *r, Vec3 *v1, Vec3 *v2)
-{
-	V3(V_ADD,)
+#define V_ADD_U(INDEX, LEN) (*r)[INDEX] = (*v1)[INDEX] + (*v2)[INDEX];
+#define V_ADD(S) void add_v##S(VEC(S) *r, VEC(S) *v1, VEC(S) *v2) \
+{ \
+	V##S(V_ADD_U,) \
 }
 
-#define V_SUB(INDEX, LEN) (*r)[INDEX] = (*v1)[INDEX] - (*v2)[INDEX];
-void sub_v3(Vec3 *r, Vec3 *v1, Vec3 *v2)
-{
-	V3(V_SUB,)
+#define V_SUB_U(INDEX, LEN) (*r)[INDEX] = (*v1)[INDEX] - (*v2)[INDEX];
+#define V_SUB(S) void sub_v##S(VEC(S) *r, VEC(S) *v1, VEC(S) *v2) \
+{ \
+	V##S(V_SUB_U,) \
 }
 
-#define V_SCALAR(INDEX, LEN) (*r)[INDEX] = s*(*v)[INDEX];
-void scalar_v3(Vec3 *r, Vec3 *v, float s)
-{
-	V3(V_SCALAR,)
+#define V_SCALAR_U(INDEX, LEN) (*r)[INDEX] = s*(*v)[INDEX];
+#define V_SCALAR(S) void scalar_v##S(VEC(S) *r, VEC(S) *v, float s) \
+{ \
+	V##S(V_SCALAR_U,) \
 }
+
+#define V_DOT_U(INDEX, LEN) (*v1)[INDEX] * (*v2)[INDEX];
+#define V_DOT(S) float dot_v##S(VEC(S) *v1, VEC(S) *v2) \
+{ \
+        return V##S(V_DOT_U, +); \
+}
+
+
+V_ADD(3)
+V_SUB(3)
+V_NORM(3)
+V_SCALAR(3)
+V_DOT(3)
+
+V_ADD(4)
+V_SUB(4)
+V_NORM(4)
+V_SCALAR(4)
+V_DOT(4)
+
 
 float cross_v3(Vec3 *r, Vec3 *u, Vec3 *v)
 {
@@ -64,19 +85,13 @@ float cross_v3(Vec3 *r, Vec3 *u, Vec3 *v)
 	(*r)[2] = (*u)[0] * (*v)[1] -(*u)[1] * (*v)[0];
 }
 
-#define V_DOT(INDEX, LEN) (*v1)[INDEX] * (*v2)[INDEX];
-float dot_v4_v4(Vec4 *v1, Vec4 *v2)
-{
-        return V4(V_DOT, +);
-}
-
 #define V_DOT_COL(INDEX, LEN) (*v)[INDEX] * (*m)[INDEX][col]
 float dot_v4_c4(Vec4 *v, Mat4 *m, int col)
 {
         return V4(V_DOT_COL, +);
 }
 
-#define V_MUL_M(INDEX, LEN) (*r)[INDEX] = dot_v##LEN##_v##LEN(m[INDEX], v);
+#define V_MUL_M(INDEX, LEN) (*r)[INDEX] = dot_v##LEN(m[INDEX], v);
 void mul_m4_v4(Vec4 *r, Mat4 *m, Vec4 *v)
 {
 	V4(V_MUL_M,)
