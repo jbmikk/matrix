@@ -5,60 +5,60 @@
 #include "matrix.h"
 
 #define V3(_, JOIN) \
-	_(0, 3) JOIN \
-	_(1, 3) JOIN \
-	_(2, 3) \
+	_(0, x, 3) JOIN \
+	_(1, y, 3) JOIN \
+	_(2, z, 3) \
 
 #define V4(_, JOIN) \
-	_(0, 4) JOIN \
-	_(1, 4) JOIN \
-	_(2, 4) JOIN \
-	_(3, 4) \
+	_(0, x, 4) JOIN \
+	_(1, y, 4) JOIN \
+	_(2, z, 4) JOIN \
+	_(4, w, 4) \
 
 #define VEC(S) Vec##S
 #define MAT(S) Mat##S
 
 void print_v3(Vec3 *v)
 {
-	printf("[%f, %f, %f]\n", (*v)[0], (*v)[1], (*v)[2]);
+	printf("[%f, %f, %f]\n", (*v).x, (*v).y, (*v).z);
 }
 
 void print_v4(Vec4 *v)
 {
-	printf("[%f, %f, %f, %f]\n", (*v)[0], (*v)[1], (*v)[2], (*v)[3]);
+	printf("[%f, %f, %f, %f]\n", (*v).x, (*v).y, (*v).z, (*v).w);
 }
 
-#define V_PRINT_M(INDEX, LEN) print_v##LEN(&((*m)[INDEX]));
+#define V_PRINT_M(INDEX, KEY, LEN) print_v##LEN(&((*m).r[INDEX]));
 void print_m4(Mat4 *m)
 {
 	V4(V_PRINT_M,);
 }
 
-#define V_NORM_U(INDEX, LEN) (*v)[INDEX] * (*v)[INDEX]
+#define V_NORM_U(INDEX, KEY, LEN) (*v).KEY * (*v).KEY
 #define V_NORM(S) float norm_v##S(VEC(S) *v) \
 { \
 	return sqrt(V3(V_NORM_U, +)); \
 }
 
-#define V_ADD_U(INDEX, LEN) (*r)[INDEX] = (*v1)[INDEX] + (*v2)[INDEX];
+#define V_ADD_U(INDEX, KEY, LEN) (*r).KEY = (*v1).KEY + (*v2).KEY;
 #define V_ADD(S) void add_v##S(VEC(S) *r, VEC(S) *v1, VEC(S) *v2) \
 { \
 	V##S(V_ADD_U,) \
 }
 
-#define V_SUB_U(INDEX, LEN) (*r)[INDEX] = (*v1)[INDEX] - (*v2)[INDEX];
+#define V_SUB_U(INDEX, KEY, LEN) (*r).KEY = (*v1).KEY - (*v2).KEY;
 #define V_SUB(S) void sub_v##S(VEC(S) *r, VEC(S) *v1, VEC(S) *v2) \
 { \
 	V##S(V_SUB_U,) \
 }
 
-#define V_SCALAR_U(INDEX, LEN) (*r)[INDEX] = s*(*v)[INDEX];
+#define V_SCALAR_U(INDEX, KEY, LEN) (*r).KEY = s*(*v).KEY;
 #define V_SCALAR(S) void scalar_v##S(VEC(S) *r, VEC(S) *v, float s) \
 { \
 	V##S(V_SCALAR_U,) \
 }
 
-#define V_DOT_U(INDEX, LEN) (*v1)[INDEX] * (*v2)[INDEX];
+#define V_DOT_U(INDEX, KEY, LEN) (*v1).KEY * (*v2).KEY;
 #define V_DOT(S) float dot_v##S(VEC(S) *v1, VEC(S) *v2) \
 { \
         return V##S(V_DOT_U, +); \
@@ -80,18 +80,18 @@ V_DOT(4)
 
 float cross_v3(Vec3 *r, Vec3 *u, Vec3 *v)
 {
-	(*r)[0] = (*u)[1] * (*v)[2] -(*u)[2] * (*v)[1];
-	(*r)[1] = (*u)[2] * (*v)[0] -(*u)[0] * (*v)[2];
-	(*r)[2] = (*u)[0] * (*v)[1] -(*u)[1] * (*v)[0];
+	(*r).x = (*u).y * (*v).z -(*u).z * (*v).y;
+	(*r).y = (*u).z * (*v).x -(*u).x * (*v).z;
+	(*r).z = (*u).x * (*v).y -(*u).y * (*v).x;
 }
 
-#define V_DOT_COL(INDEX, LEN) (*v)[INDEX] * (*m)[INDEX][col]
+#define V_DOT_COL(INDEX, KEY, LEN) (*v).KEY * (*m).r[INDEX][col]
 float dot_v4_c4(Vec4 *v, Mat4 *m, int col)
 {
         return V4(V_DOT_COL, +);
 }
 
-#define V_MUL_M(INDEX, LEN) (*r)[INDEX] = dot_v##LEN(m[INDEX], v);
+#define V_MUL_M(INDEX, KEY, LEN) (*r).KEY = dot_v##LEN((*m).r[INDEX], v);
 void mul_m4_v4(Vec4 *r, Mat4 *m, Vec4 *v)
 {
 	V4(V_MUL_M,)
@@ -99,62 +99,62 @@ void mul_m4_v4(Vec4 *r, Mat4 *m, Vec4 *v)
 
 void mul_m4(Mat4 *result, Mat4 *m1, Mat4 *m2)
 {
-        (*result)[0][0] = dot_v4_c4(&((*m1)[0]), m2, 0);
-        (*result)[0][1] = dot_v4_c4(&((*m1)[0]), m2, 1);
-        (*result)[0][2] = dot_v4_c4(&((*m1)[0]), m2, 2);
-        (*result)[0][3] = dot_v4_c4(&((*m1)[0]), m2, 3);
-        (*result)[1][0] = dot_v4_c4(&((*m1)[1]), m2, 0);
-        (*result)[1][1] = dot_v4_c4(&((*m1)[1]), m2, 1);
-        (*result)[1][2] = dot_v4_c4(&((*m1)[1]), m2, 2);
-        (*result)[1][3] = dot_v4_c4(&((*m1)[1]), m2, 3);
-        (*result)[2][0] = dot_v4_c4(&((*m1)[2]), m2, 0);
-        (*result)[2][1] = dot_v4_c4(&((*m1)[2]), m2, 1);
-        (*result)[2][2] = dot_v4_c4(&((*m1)[2]), m2, 2);
-        (*result)[2][3] = dot_v4_c4(&((*m1)[2]), m2, 3);
-        (*result)[3][0] = dot_v4_c4(&((*m1)[3]), m2, 0);
-        (*result)[3][1] = dot_v4_c4(&((*m1)[3]), m2, 1);
-        (*result)[3][2] = dot_v4_c4(&((*m1)[3]), m2, 2);
-        (*result)[3][3] = dot_v4_c4(&((*m1)[3]), m2, 3);
+        (*result).r[0].x = dot_v4_c4(&((*m1).r[0]), m2, 0);
+        (*result).r[0].y = dot_v4_c4(&((*m1).r[0]), m2, 1);
+        (*result).r[0].z = dot_v4_c4(&((*m1).r[0]), m2, 2);
+        (*result).r[0].w = dot_v4_c4(&((*m1).r[0]), m2, 3);
+        (*result).r[1].x = dot_v4_c4(&((*m1).r[1]), m2, 0);
+        (*result).r[1].y = dot_v4_c4(&((*m1).r[1]), m2, 1);
+        (*result).r[1].z = dot_v4_c4(&((*m1).r[1]), m2, 2);
+        (*result).r[1].w = dot_v4_c4(&((*m1).r[1]), m2, 3);
+        (*result).r[2].x = dot_v4_c4(&((*m1).r[2]), m2, 0);
+        (*result).r[2].y = dot_v4_c4(&((*m1).r[2]), m2, 1);
+        (*result).r[2].z = dot_v4_c4(&((*m1).r[2]), m2, 2);
+        (*result).r[2].w = dot_v4_c4(&((*m1).r[2]), m2, 3);
+        (*result).r[3].x = dot_v4_c4(&((*m1).r[3]), m2, 0);
+        (*result).r[3].y = dot_v4_c4(&((*m1).r[3]), m2, 1);
+        (*result).r[3].z = dot_v4_c4(&((*m1).r[3]), m2, 2);
+        (*result).r[3].w = dot_v4_c4(&((*m1).r[3]), m2, 3);
 }
 
 void translate_m4(Mat4 *m, float x, float y, float z)
 {
-	(*m)[0][0] = 1.0f;
-	(*m)[0][1] = 0.0f;
-	(*m)[0][2] = 0.0f;
-	(*m)[0][3] = x;
-	(*m)[1][0] = 0.0f;
-	(*m)[1][1] = 1.0f;
-	(*m)[1][2] = 0.0f;
-	(*m)[1][3] = y;
-	(*m)[2][0] = 0.0f;
-	(*m)[2][1] = 0.0f;
-	(*m)[2][2] = 1.0f;
-	(*m)[2][3] = z;
-	(*m)[3][0] = 0.0f;
-	(*m)[3][1] = 0.0f;
-	(*m)[3][2] = 0.0f;
-	(*m)[3][3] = 1.0f;
+	(*m).r[0].x = 1.0f;
+	(*m).r[0].y = 0.0f;
+	(*m).r[0].z = 0.0f;
+	(*m).r[0].w = x;
+	(*m).r[1].x = 0.0f;
+	(*m).r[1].y = 1.0f;
+	(*m).r[1].z = 0.0f;
+	(*m).r[1].w = y;
+	(*m).r[2].x = 0.0f;
+	(*m).r[2].y = 0.0f;
+	(*m).r[2].z = 1.0f;
+	(*m).r[2].w = z;
+	(*m).r[3].x = 0.0f;
+	(*m).r[3].y = 0.0f;
+	(*m).r[3].z = 0.0f;
+	(*m).r[3].w = 1.0f;
 }
 
 void scale_m4(Mat4 *m, float x, float y, float z)
 {
-	(*m)[0][0] = x;
-	(*m)[0][1] = 0.0f;
-	(*m)[0][2] = 0.0f;
-	(*m)[0][3] = 0.0f;
-	(*m)[1][0] = 0.0f;
-	(*m)[1][1] = y;
-	(*m)[1][2] = 0.0f;
-	(*m)[1][3] = 0.0f;
-	(*m)[2][0] = 0.0f;
-	(*m)[2][1] = 0.0f;
-	(*m)[2][2] = z;
-	(*m)[2][3] = 0.0f;
-	(*m)[3][0] = 0.0f;
-	(*m)[3][1] = 0.0f;
-	(*m)[3][2] = 0.0f;
-	(*m)[3][3] = 1.0f;
+	(*m).r[0].x = x;
+	(*m).r[0].y = 0.0f;
+	(*m).r[0].z = 0.0f;
+	(*m).r[0].w = 0.0f;
+	(*m).r[1].x = 0.0f;
+	(*m).r[1].y = y;
+	(*m).r[1].z = 0.0f;
+	(*m).r[1].w = 0.0f;
+	(*m).r[2].x = 0.0f;
+	(*m).r[2].y = 0.0f;
+	(*m).r[2].z = z;
+	(*m).r[2].w = 0.0f;
+	(*m).r[3].x = 0.0f;
+	(*m).r[3].y = 0.0f;
+	(*m).r[3].z = 0.0f;
+	(*m).r[3].w = 1.0f;
 }
 
 void rotate_m4(Mat4 *m, float x, float y, float z, float angle)
@@ -170,50 +170,50 @@ void rotate_m4(Mat4 *m, float x, float y, float z, float angle)
 	float xz = ux*uz*(1-a_cos);
 	float yz = uy*uz*(1-a_cos);
 
-	(*m)[0][0] = a_cos + ux*ux*(1-a_cos);
-	(*m)[0][1] = xy-uz*a_sin;
-	(*m)[0][2] = xz+uy*a_sin;
-	(*m)[0][3] = 0.0f;
+	(*m).r[0].x = a_cos + ux*ux*(1-a_cos);
+	(*m).r[0].y = xy-uz*a_sin;
+	(*m).r[0].z = xz+uy*a_sin;
+	(*m).r[0].w = 0.0f;
 
-	(*m)[1][0] = xy+z*a_sin;
-	(*m)[1][1] = a_cos + uy*uy*(1-a_cos);
-	(*m)[1][2] = yz-ux*a_sin;
-	(*m)[1][3] = 0.0f;
+	(*m).r[1].x = xy+z*a_sin;
+	(*m).r[1].y = a_cos + uy*uy*(1-a_cos);
+	(*m).r[1].z = yz-ux*a_sin;
+	(*m).r[1].w = 0.0f;
 
-	(*m)[2][0] = xz-uy*a_sin;
-	(*m)[2][1] = yz+ux*a_sin;
-	(*m)[2][2] = a_cos + uz*uz*(1-a_cos);
-	(*m)[2][3] = 0.0f;
+	(*m).r[2].x = xz-uy*a_sin;
+	(*m).r[2].y = yz+ux*a_sin;
+	(*m).r[2].z = a_cos + uz*uz*(1-a_cos);
+	(*m).r[2].w = 0.0f;
 
-	(*m)[3][0] = 0.0f;
-	(*m)[3][1] = 0.0f;
-	(*m)[3][2] = 0.0f;
-	(*m)[3][3] = 1.0f;
+	(*m).r[3].x = 0.0f;
+	(*m).r[3].y = 0.0f;
+	(*m).r[3].z = 0.0f;
+	(*m).r[3].w = 1.0f;
 }
 
 void perspective_m4(Mat4 *m, float fovy, float aspect, float near, float far)
 {
 	float f = cos(fovy/2.0f)/sin(fovy/2.0f);
 
-	(*m)[0][0] = f/aspect;
-	(*m)[0][1] = 0.0f;
-	(*m)[0][2] = 0.0f;
-	(*m)[0][3] = 0.0f;
+	(*m).r[0].x = f/aspect;
+	(*m).r[0].y = 0.0f;
+	(*m).r[0].z = 0.0f;
+	(*m).r[0].w = 0.0f;
 
-	(*m)[1][0] = 0.0f;
-	(*m)[1][1] = f;
-	(*m)[1][2] = 0.0f;
-	(*m)[1][3] = 0.0f;
+	(*m).r[1].x = 0.0f;
+	(*m).r[1].y = f;
+	(*m).r[1].z = 0.0f;
+	(*m).r[1].w = 0.0f;
 
-	(*m)[2][0] = 0.0f;
-	(*m)[2][1] = 0.0f;
-	(*m)[2][2] = (far+near)/(near-far);
-	(*m)[2][3] = (2*far*near)/(near-far);
+	(*m).r[2].x = 0.0f;
+	(*m).r[2].y = 0.0f;
+	(*m).r[2].z = (far+near)/(near-far);
+	(*m).r[2].w = (2*far*near)/(near-far);
 
-	(*m)[3][0] = 0.0f;
-	(*m)[3][1] = 0.0f;
-	(*m)[3][2] = -1.0;
-	(*m)[3][3] = 0.0f;
+	(*m).r[3].x = 0.0f;
+	(*m).r[3].y = 0.0f;
+	(*m).r[3].z = -1.0;
+	(*m).r[3].w = 0.0f;
 }
 
 void look_at_m4(Mat4 *m, Vec3 *pos, Vec3 *center, Vec3 *UP)
@@ -230,26 +230,26 @@ void look_at_m4(Mat4 *m, Vec3 *pos, Vec3 *center, Vec3 *UP)
 	scalar_v3(&s, &S, 1.0f/norm_v3(&S));
 	cross_v3(&u, &s, &f);
 
-	M[0][0] = S[0];
-	M[0][1] = S[1];
-	M[0][2] = S[2];
-	M[0][3] = 0;
+	M.r[0].x = S[0];
+	M.r[0].y = S[1];
+	M.r[0].z = S[2];
+	M.r[0].w = 0;
 
-	M[1][0] = u[0];
-	M[1][1] = u[1];
-	M[1][2] = u[2];
-	M[1][3] = 0;
+	M.r[1].x = u[0];
+	M.r[1].y = u[1];
+	M.r[1].z = u[2];
+	M.r[1].w = 0;
 
-	M[2][0] = -f[0];
-	M[2][1] = -f[1];
-	M[2][2] = -f[2];
-	M[2][3] = 0;
+	M.r[2].x = -f[0];
+	M.r[2].y = -f[1];
+	M.r[2].z = -f[2];
+	M.r[2].w = 0;
 
-	M[3][0] = 0.0f;
-	M[3][1] = 0.0f;
-	M[3][2] = 0.0f;
-	M[3][3] = 1.0f;
+	M.r[3].x = 0.0f;
+	M.r[3].y = 0.0f;
+	M.r[3].z = 0.0f;
+	M.r[3].w = 1.0f;
 
-	translate_m4(&T, -(*pos)[0], -(*pos)[1], -(*pos)[2]);
+	translate_m4(&T, -(*pos).x, -(*pos).y, -(*pos).z);
 	mul_m4(m, &M, &T);
 }

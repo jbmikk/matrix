@@ -4,11 +4,26 @@
 //#define Vec(N) float Vec##N[N]
 //#define Mat(N, M) float Mat##N##x##M[N][M]
 
-typedef float Vec3[4];
-typedef float Vec4[4];
+typedef struct Vec3 {
+        float x;
+        float y;
+        float z;
+} Vec3;
 
-typedef float Mat3[3][3];
-typedef float Mat4[4][4];
+typedef struct Vec4 {
+        float x;
+        float y;
+        float z;
+        float w;
+} Vec4;
+
+typedef struct Mat3 {
+        Vec3 r[3];
+} Mat3;
+
+typedef struct Mat4 {
+        Vec4 r[4];
+} Mat4;
 
 float norm_v3(Vec3 *v);
 void add_v3(Vec3 *r, Vec3 *v1, Vec3 *v2);
