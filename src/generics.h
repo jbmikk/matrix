@@ -22,7 +22,7 @@
 #define V_NORM_U(INDEX, LEN) (*v)[INDEX] * (*v)[INDEX]
 #define V_NORM(S) float norm_v##S(VEC(S) *v) \
 { \
-	return sqrt(V3(V_NORM_U, +)); \
+	return sqrt(V##S(V_NORM_U, +)); \
 }
 
 #define V_ADD_U(INDEX, LEN) (*r)[INDEX] = (*v1)[INDEX] + (*v2)[INDEX];
