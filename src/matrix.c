@@ -34,6 +34,12 @@ void print_m4(Mat4 *m)
 	V4(V_PRINT_M,);
 }
 
+#define V_INIT_U(INDEX, LEN) (*r)[INDEX] = c;
+#define V_INIT(S) void init_v##S(VEC(S) *r, float c) \
+{ \
+	V##S(V_INIT_U,) \
+}
+
 #define V_NORM_U(INDEX, LEN) (*v)[INDEX] * (*v)[INDEX]
 #define V_NORM(S) float norm_v##S(VEC(S) *v) \
 { \
@@ -65,12 +71,14 @@ void print_m4(Mat4 *m)
 }
 
 
+V_INIT(3)
 V_ADD(3)
 V_SUB(3)
 V_NORM(3)
 V_SCALAR(3)
 V_DOT(3)
 
+V_INIT(4)
 V_ADD(4)
 V_SUB(4)
 V_NORM(4)
