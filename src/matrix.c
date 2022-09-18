@@ -36,7 +36,7 @@ V_SCALAR(4)
 V_DOT(4)
 
 
-float cross_v3(Vec3 *r, Vec3 *u, Vec3 *v)
+void cross_v3(Vec3 *r, Vec3 *u, Vec3 *v)
 {
 	(*r)[0] = (*u)[1] * (*v)[2] -(*u)[2] * (*v)[1];
 	(*r)[1] = (*u)[2] * (*v)[0] -(*u)[0] * (*v)[2];

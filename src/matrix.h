@@ -15,7 +15,7 @@ float norm_v3(Vec3 *v);
 void add_v3(Vec3 *r, Vec3 *v1, Vec3 *v2);
 void sub_v3(Vec3 *r, Vec3 *v1, Vec3 *v2);
 void scalar_v3(Vec3 *r, Vec3 *v, float s);
-float cross_v3(Vec3 *r, Vec3 *u, Vec3 *v);
+void cross_v3(Vec3 *r, Vec3 *u, Vec3 *v);
 
 void init_v4(Vec3 *r, float c);
 float dot_v4(Vec4 *v1, Vec4 *v2);
