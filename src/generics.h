@@ -43,7 +43,7 @@
 	V##S(V_SCALAR_U,) \
 }
 
-#define V_DOT_U(INDEX, LEN) (*v1)[INDEX] * (*v2)[INDEX];
+#define V_DOT_U(INDEX, LEN) (*v1)[INDEX] * (*v2)[INDEX]
 #define V_DOT(S) float dot_v##S(VEC(S) *v1, VEC(S) *v2) \
 { \
         return V##S(V_DOT_U, +); \
