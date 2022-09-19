@@ -53,12 +53,34 @@ void v3_add_vectors(){
 	t_assert(r[2] == 9);
 }
 
+void v3_dot_vectors(){
+
+        Vec3 v1 = { 1, 0, 1 };
+        Vec3 v2 = { 1, 1, 0 };
+
+        float r = dot_v3(&v1, &v2);
+
+	t_assert(r == 1);
+}
+
+void v4_dot_vectors(){
+
+        Vec4 v1 = { 1, 0, 0, 1 };
+        Vec4 v2 = { 1, 1, 1, 1 };
+
+        float r = dot_v4(&v1, &v2);
+
+	t_assert(r == 2);
+}
+
 int main(int argc, char** argv){
 
 	t_init();
 	t_test(v3_init_vectors);
 	t_test(v4_init_vectors);
 	t_test(v3_add_vectors);
+	t_test(v3_dot_vectors);
+	t_test(v4_dot_vectors);
 
 	return t_done();
 }

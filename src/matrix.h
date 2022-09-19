@@ -11,6 +11,7 @@ typedef float Mat3[3][3];
 typedef float Mat4[4][4];
 
 void init_v3(Vec3 *r, float c);
+float dot_v3(Vec3 *v1, Vec3 *v2);
 float norm_v3(Vec3 *v);
 void add_v3(Vec3 *r, Vec3 *v1, Vec3 *v2);
 void sub_v3(Vec3 *r, Vec3 *v1, Vec3 *v2);
