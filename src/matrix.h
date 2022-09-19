@@ -33,5 +33,7 @@ void print_v3(Vec3 *v);
 void print_v4(Vec4 *v);
 void print_m4(Mat4 *m);
 
+#include "call.h"
+
 #define Mat(A, B)
 #endif //CMATH_H

@@ -73,6 +73,20 @@ void v4_dot_vectors(){
 	t_assert(r == 2);
 }
 
+void generic_dot(){
+        Vec3 v1 = { 1, 0, 1 };
+        Vec3 v2 = { 1, 1, 0 };
+
+        Vec4 v3 = { 1, 0, 0, 1 };
+        Vec4 v4 = { 1, 1, 1, 1 };
+
+        float r1 = dot(&v1, &v2);
+        float r2 = dot(&v3, &v4);
+
+        t_assert(r1 == 1);
+        t_assert(r2 == 2);
+}
+
 int main(int argc, char** argv){
 
 	t_init();
@@ -81,6 +95,7 @@ int main(int argc, char** argv){
 	t_test(v3_add_vectors);
 	t_test(v3_dot_vectors);
 	t_test(v4_dot_vectors);
+	t_test(generic_dot);
 
 	return t_done();
 }
