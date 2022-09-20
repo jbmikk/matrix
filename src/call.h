@@ -19,11 +19,14 @@
 
 #define v_sub(V, ...) EXPAND(NAME_TEMPLATE, V, sub_)((V), __VA_ARGS__)
 
+// TODO: why variadic macros work for this but not for print?
 #define v_norm(V, ...) EXPAND(NAME_TEMPLATE, V, norm_)((V), __VA_ARGS__)
 
 #define v_scalar(V, ...) EXPAND(NAME_TEMPLATE, V, scalar_)((V), __VA_ARGS__)
 
 #define v_dot(V, ...) EXPAND(NAME_TEMPLATE, V, dot_)((V), __VA_ARGS__)
+
+#define v_print(V) EXPAND(NAME_TEMPLATE, V, print_)((V))
 
 #endif //CALL_H
 

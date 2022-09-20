@@ -114,6 +114,8 @@ void generic_v_add(){
         Vec4 v4 = { 4, 5, 6, 7 };
         Vec4 r2;
 
+        v_print(&v1);
+        v_print(&v4);
         v_add(&r1, &v1, &v2);
         v_add(&r2, &v3, &v4);
 
@@ -127,6 +129,15 @@ void generic_v_add(){
         t_assert(r2[3] == 11);
 }
 
+void generic_v_print(){
+
+        Vec3 v1 = { 1, 2, 3 };
+        Vec4 v2 = { 4, 5, 6, 7 };
+
+        v_print(&v1);
+        v_print(&v2);
+}
+
 int main(int argc, char** argv){
 
         t_init();
@@ -138,6 +149,7 @@ int main(int argc, char** argv){
         t_test(generic_v_init);
         t_test(generic_v_dot);
         t_test(generic_v_add);
+        t_test(generic_v_print);
 
         return t_done();
 }

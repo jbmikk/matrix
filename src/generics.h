@@ -1,3 +1,4 @@
+#define COMMA ,
 
 #define V3(_, JOIN) \
 	_(0, 3) JOIN \
@@ -47,4 +48,11 @@
 #define V_DOT(S) float dot_v##S(VEC(S) *v1, VEC(S) *v2) \
 { \
         return V##S(V_DOT_U, +); \
+}
+
+#define V_PRINT_U1(INDEX, LEN) "%f "
+#define V_PRINT_U2(INDEX, LEN) (*v)[INDEX]
+#define V_PRINT(S) void print_v##S(VEC(S) *v) \
+{ \
+        printf("[" V##S(V_PRINT_U1,) "]\n",V##S(V_PRINT_U2,COMMA)); \
 }

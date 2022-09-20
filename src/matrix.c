@@ -5,16 +5,6 @@
 #include "matrix.h"
 #include "generics.h"
 
-void print_v3(Vec3 *v)
-{
-	printf("[%f, %f, %f]\n", (*v)[0], (*v)[1], (*v)[2]);
-}
-
-void print_v4(Vec4 *v)
-{
-	printf("[%f, %f, %f, %f]\n", (*v)[0], (*v)[1], (*v)[2], (*v)[3]);
-}
-
 #define V_PRINT_M(INDEX, LEN) print_v##LEN(&((*m)[INDEX]));
 void print_m4(Mat4 *m)
 {
@@ -27,6 +17,7 @@ V_SUB(3)
 V_NORM(3)
 V_SCALAR(3)
 V_DOT(3)
+V_PRINT(3)
 
 V_INIT(4)
 V_ADD(4)
@@ -34,6 +25,7 @@ V_SUB(4)
 V_NORM(4)
 V_SCALAR(4)
 V_DOT(4)
+V_PRINT(4)
 
 
 void cross_v3(Vec3 *r, Vec3 *u, Vec3 *v)
