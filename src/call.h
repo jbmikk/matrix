@@ -7,31 +7,23 @@
 
 #define COMMA ,
 
-#define CALL_EXPANSION(TYPE, PREFIX, NAME) TYPE: NAME##PREFIX
+#define EXPAND(TEMPLATE, T, ...) _Generic((T), \
+	VEC_MAP(TEMPLATE, COMMA, __VA_ARGS__) \
+)
 
-#define v_init(V, C) \
-        _Generic((V), VEC_MAP(CALL_EXPANSION, COMMA, init_)) \
-        ((V), (C))
+#define NAME_TEMPLATE(TYPE, PREFIX, NAME) TYPE: NAME##PREFIX
 
-#define v_add(R, V1, V2) \
-        _Generic((V1), VEC_MAP(CALL_EXPANSION, COMMA, add_)) \
-        ((R), (V1), (V2))
+#define v_init(V, ...) EXPAND(NAME_TEMPLATE, V, init_)((V), __VA_ARGS__)
 
-#define v_sub(R, V1, V2) \
-        _Generic((V1), VEC_MAP(CALL_EXPANSION, COMMA, sub_)) \
-        ((R), (V1), (V2))
+#define v_add(V, ...) EXPAND(NAME_TEMPLATE, V, add_)((V), __VA_ARGS__)
 
-#define v_norm(V) \
-        _Generic((V), VEC_MAP(CALL_EXPANSION, COMMA, norm_)) \
-        ((V))
+#define v_sub(V, ...) EXPAND(NAME_TEMPLATE, V, sub_)((V), __VA_ARGS__)
 
-#define v_scalar(R, V1, S) \
-        _Generic((V1), VEC_MAP(CALL_EXPANSION, COMMA, scalar_)) \
-        ((R), (V1), (S))
+#define v_norm(V, ...) EXPAND(NAME_TEMPLATE, V, norm_)((V), __VA_ARGS__)
 
-#define v_dot(V1, V2) \
-        _Generic((V1), VEC_MAP(CALL_EXPANSION, COMMA, dot_)) \
-        ((V1), (V2))
+#define v_scalar(V, ...) EXPAND(NAME_TEMPLATE, V, scalar_)((V), __VA_ARGS__)
+
+#define v_dot(V, ...) EXPAND(NAME_TEMPLATE, V, dot_)((V), __VA_ARGS__)
 
 #endif //CALL_H
 
