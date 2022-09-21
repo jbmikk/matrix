@@ -1,3 +1,9 @@
+#ifndef GENERICS_H
+#define GENERICS_H
+
+#include <stdio.h>
+#include <math.h>
+
 #define COMMA ,
 
 #define V3(_, JOIN) \
@@ -56,3 +62,5 @@
 { \
         printf("[" V##S(V_PRINT_U1,) "]\n",V##S(V_PRINT_U2,COMMA)); \
 }
+
+#endif //GENERICS_H

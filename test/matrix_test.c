@@ -2,7 +2,7 @@
 #include <string.h>
 #include <stdio.h>
 
-#include "matrix.h"
+#include "cmath.h"
 #include "ctest.h"
 
 void t_setup(){

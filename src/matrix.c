@@ -1,7 +1,3 @@
-
-#include <stdio.h>
-#include <math.h>
-
 #include "matrix.h"
 #include "generics.h"
 
@@ -10,23 +6,6 @@ void print_m4(Mat4 *m)
 {
 	V4(V_PRINT_M,);
 }
-
-V_INIT(3)
-V_ADD(3)
-V_SUB(3)
-V_NORM(3)
-V_SCALAR(3)
-V_DOT(3)
-V_PRINT(3)
-
-V_INIT(4)
-V_ADD(4)
-V_SUB(4)
-V_NORM(4)
-V_SCALAR(4)
-V_DOT(4)
-V_PRINT(4)
-
 
 void cross_v3(Vec3 *r, Vec3 *u, Vec3 *v)
 {
